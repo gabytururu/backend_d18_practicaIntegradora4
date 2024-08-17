@@ -1,0 +1,268 @@
+paths:
+  /api/carts:
+    get:
+      summary: Listado de todos los carritos de compra registrados en la app.
+      tags:
+        - Carts
+      description: Permite visualizar todos los carritos que han sido creados por usuarios. Está disponible exclusivamente para los usuarios con rol de administrador (admin)
+      responses:
+        '200':   
+          description: Los carritos solicitados fueron obtenidos exitosamente. 
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#components/schemas/Cart'  
+        '401':
+          description: Error de autenticación. Debe existir un usuario loggeado para procesar esta petición   
+        '403':
+          description: Credenciales Inválidas. El usuario no cuenta con suficientes privilegios para hacer esta petición. 
+        '404':
+          description: El sistema no logro ejecutar la petición ya que no encontro datos en la base + endpoint elegidos (no hay carritos)
+        '500':  
+          description: Error del servidor al ejecutar la petición.
+           
+    post:
+      summary: Creación y almacenamiento de un nuevo carrito en la base de datos
+      tags:
+        - Carts
+      description: Permite crear un nuevo carrito vacío, listo para almacenar productos o ser asignado a un usuario. Este proceso se ejecuta cada vez que se registra un nuevo usuario. Así mismo, puede ser invocado de forma directa por los usuarios con rol de administradores (admin) 
+      responses:
+        '201':
+          description: el objeto del nuevo carrito fue enviado creado y almacenado exitosamente en la BD.
+          content:
+            application/json:
+              schema:   
+                $ref: '#/components/schemas/Cart'
+        '401':
+          description: Error de autenticación. Debe existir un usuario loggeado para poder procesar esta petición   
+        '403':
+          description: Credenciales Inválidas. El usuario no cuenta con suficientes privilegios para hacer esta petición. 
+        '500':  
+          description: Error del servidor al ejecutar la petición.
+  /api/carts/{cid}:
+    get:
+      summary: Obtención de 1 carrito detallado con sus productos
+      tags:
+        - Carts
+      description: Permite visualizar el contenido (productos) del carrito con el id# correspondiente al indicado por el parámetro enviado (cid). Está disponible exclusivamente para el usuario que es dueño del carrito indicado y para los administradores
+      operationId: getCartById
+      parameters:
+        - name: cid
+          in: path
+          description: Cart Id#
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: El carrito seleccionado fue obtenido exitosamente de la BD.
+          content:
+            application/json:
+              schema:       
+                $ref: '#components/schemas/Cart'  
+        '400': 
+          description: El formato del id de carrito (cid) proporcionado no es correcto o no cumple con el formato requerido
+        '401':
+          description: Error de autenticación. Debe existir un usuario loggeado para poder procesar esta petición   
+        '403':
+          description: Credenciales Inválidas. El usuario no cuenta con suficientes privilegios para hacer esta petición. 
+        '404':
+          description: El carrito seleccionado no fue encontrado en la base de datos 
+        '500':
+          description: Error del servidor al ejecutar la petición.
+    put:
+      summary: Sustitución total/reemplazo del contenido del carrito por un nuevo contenido proporcionado por medio del cuerpo (body) de la petición.
+      tags:
+        - Carts
+      description: Permite modificar por completo el contenido del carrito y sustituirlo por los nuevos productos y cantidades indicados en el cuerpo de la petición enviada. Está disponible únicamente para administradores y usuarios premium que sean dueños del carrito en cuestión     
+      requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    pid:
+                      type: string
+                      description: Id# del producto a ser incluido en el carrito
+                    qty:
+                      type: number
+                      description: cantidad de unidades del producto a incluir
+                  example:
+                    pid: "663d206d60f80adeaa82bb6a"
+                    qty: 3
+      operationId: replaceCartContent
+      parameters:
+        - name: cid
+          in: path
+          description: Cart Id#
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: El producto seleccionado fue modificado exitosamente en la BD.
+          content:
+            application/json:
+              schema:       
+                $ref: '#components/schemas/Product'  
+        '400': 
+          description: El formato del id del carrito (cid) enviado por parámetro o de los datos enviados en el cuerpo no es correcto
+        '401': 
+          description: Es necesario autenticar(login) para obtener la respuesta solicitada. 
+        '403': 
+          description: El cliente no posee los permisos necesarios para realizar esta operación.
+        '404':
+          description: El carrito seleccionado o alguno de los productos enviados no fue encontrado en la base de datos 
+        '500':
+          description: Error del servidor al ejecutar la petición.
+    delete:
+      summary: Eliminación del contenido de 1 carrito de la base de datos. 
+      tags:
+        - Carts
+      description: Permite eliminar el contenido total de un carrito de la base de datos, manteniendo la existencia del carrito (ahora vacío) y su vínculo con el usuario al cual se asocia. El carrito a ser borrado es el correspondiente al id# del parámetro proporcionado "cid". Está disponible únicamente para administradores y usuarios que son "propietarios" del carrito en cuestión. 
+      operationId: deleteAllProductsInCart
+      parameters:
+        - name: cid
+          in: path
+          description: Cart Id#
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: El contenido del carrito seleccionado fue borrado exitosamente. ahoa el carrito está nuevamente vacío.
+          content:
+            application/json:
+              schema:       
+                $ref: '#components/schemas/Cart'  
+        '400': 
+          description: El formato del id de carrito (cid) proporcionado no es correcto
+        '401': 
+          description: Es necesario autenticar(login) para intentar la acción solicitada. 
+        '403': 
+          description: El cliente no posee los permisos necesarios para realizar esta operación.
+        '404':
+          description: El carrito seleccionado no fue encontrado en la base de datos 
+        '500':
+          description: Error del servidor al ejecutar la petición.
+  /api/carts/{cid}/products/{pid}:
+    put:
+      summary: Agregar nuevos productos a un carrito (cuando aun no existen en el cart) o aumentar la cantidad total del producto en cuestión caso de ya existir en el carrito. 
+      tags:
+        - Carts
+      description: Permite aumentar la cantidad de unidades vinculadas a un producto existente en un carrito. Si el carrito ya cuenta con dicho producto, la cantidad aumentará. Si el carrito no cuenta con dicho producto, entonces se agregará al mismo. Puede operar con parámetros del cuerpo (body) o sin el. Si se invoca sin body, La cantidad aumentada será de +1. Si se desea aumentar más unidades, estas pueden pasarse en el cuerpo de la petición especificando la cantidad(qty) a aumentar. El carrito a ser modificado es el correspondiente al id# del primer parámetro proporcionado "cid". El producto a ser aumentado es el correspondiente al id# del segundo parámetro proporcionado "pid". Está disponible únicamente para administradores y usuarios que son "propietarios" del carrito en cuestión. 
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object            
+              properties:
+                qty:
+                  type: number
+                  description: cantidad de unidades que se desea aumentar del producto indicado por parámetro
+              example:
+                qty: 3
+      operationId: updateProductInCart
+      parameters:
+        - name: cid
+          in: path
+          description: Cart Id#
+          required: true
+          schema:
+            type: string
+        - name: pid
+          in: path
+          description: Product Id#
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: La cantidad del producto en el carrito seleccionado fue actualizado exitosamente.
+          content:
+            application/json:
+              schema:       
+                $ref: '#components/schemas/Cart'  
+        '400': 
+          description: El formato del id de carrito (cid) o producto(pid) proporcionado no es correcto
+        '401': 
+          description: Es necesario autenticar(login) para intentar la acción solicitada. 
+        '403': 
+          description: El cliente no posee los permisos necesarios para realizar esta operación.
+        '404':
+          description: El carrito o producto seleccionado no fue encontrado en la base de datos 
+        '500':
+          description: Error del servidor al ejecutar la petición.
+    delete:
+      summary: elimina un producto específico (pasado por parámetro pid) del carrito indicado (pasado por parámetro cid).
+      tags:
+        - Carts
+      description: Permite eliminar un producto puntual del carrito indicado, mientras mantiene el resto de los productos del carrito intactos. El carrito a ser borrado es el correspondiente al id# del primer parámetro proporcionado "cid". El producto a ser borrado es el correspondiente al id# del segundo parámetro proporcionado "pid". Está disponible únicamente para administradores y usuarios que son "propietarios" del carrito en cuestión. 
+      operationId: deleteSingleProductInCart
+      parameters:
+        - name: cid
+          in: path
+          description: Cart Id#
+          required: true
+          schema:
+            type: string
+        - name: pid
+          in: path
+          description: Product Id#
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: El carrito indicado se actualizó correctamente, el producto señalado por parámetro ha sido eliminado de este.
+          content:
+            application/json:
+              schema:       
+                $ref: '#components/schemas/Cart'  
+        '400': 
+          description: El formato del id de carrito (cid) o producto(pid) proporcionado no es correcto
+        '401': 
+          description: Es necesario autenticar(login) para intentar la acción solicitada. 
+        '403': 
+          description: El cliente no posee los permisos necesarios para realizar esta operación.
+        '404':
+          description: El carrito o producto seleccionado no fue encontrado en la base de datos 
+        '500':
+          description: Error del servidor al ejecutar la petición.
+  /api/carts/{cid}/purchase:
+    post:
+      summary: Genera una nueva orden de compra vinculada al carrito referido.
+      tags:
+        - Carts
+      description: Permite completar la compra asociada a los productos contenidos en un carrito puntual (el pasado por parámetro cid). El carrito a ser comprado es el correspondiente al id# del parámetro proporcionado "cid". Está disponible únicamente para usuarios que son "propietarios" del carrito en cuestión. 
+      operationId: completePurchase
+      parameters:
+        - name: cid
+          in: path
+          description: Cart Id#
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: La orden de compra vinculada al contenido del carrito indicado ha sido generada y enviada por correo electrónico al usuario.
+          content:
+            application/json:
+              schema:       
+                $ref: '#components/schemas/Cart'  
+        '400': 
+          description: El formato del id de carrito (cid)  proporcionado no es correcto o no corresponde al usuario registrado
+        '401': 
+          description: Es necesario autenticar(login) para intentar la acción solicitada. 
+        '403': 
+          description: El cliente no posee los permisos necesarios para realizar esta operación.
+        '404':
+          description: El carrito indicado no fue encontrado en la base de datos por lo que la acción de compra no pudo completarse
+        '500':
+          description: Error del servidor al ejecutar la petición.

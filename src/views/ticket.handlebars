@@ -1,0 +1,58 @@
+{{#if userProfile.isPublic}}
+    {{>menu}}
+{{else}}
+    {{>menuLoggedUser}}
+{{/if}}
+
+<div class="mainContainer">
+    <div class="titles">
+        <h1>¡Gracias por tu Compra!</h1>
+        <h4>Código de Ticket #{{ticketDetails.code}}</h4>
+        <small>{{ticketDetails.createdAt}}</small>
+    </div>
+</div>
+
+<div class="productsContainer">       
+    <div class="productsList">
+        <div class="productCard">
+            <h2>Tu Compra Incluye:</h2>
+            <div class="resultsliContainer">
+                {{#each ticketDetails.productsPurchased}}
+                    <div>                   
+                        <p><strong>{{qty}} {{title}} ${{price}} USD</strong></p>
+                        <hr>
+                        <hr>
+                    </div>                    
+                {{/each}}
+                <div>            
+                    <p><strong>Total:</strong> ${{ticketDetails.amount}} USD</p>
+                </div> 
+                <div>           
+                    <p><small><i>*Nota: Los siguientes productos no fueron procesados por falta de stock, permanecerá en tu carrito por si deseas adquirirlo más adelante:</i></small></p>
+                    <ul>
+                        {{#each ticketDetails.carts.products}}
+                            <li><small><i>{{pid}}</i></small></li>
+                        {{/each}}
+                    </ul>
+                </div>  
+                <div>
+                    {{#if ticketCreated.hasEmail}}
+                        <small>*Te hemos enviado un email con las principales referencias de esta compra*</small>
+                    {{/if}}
+                    {{#unless ticketCreated.hasEmail}}
+                        <small>*No contamos con tu email en nuestros registros por lo que no ha sido posible enviarte un email con el ticket de compra. Si deseas que te enviemos futuros tickets, por favor actualiza tus datos y proporciona un correo electrónico válido*</small>
+                    {{/unless}}
+                    <small>*Te hemos enviado un email con las principales referencias de esta compra*</small>
+                </div>              
+                {{!-- <div class="finalizePurchase">
+                    <button class="sendEmail" onClick="sendEmail('{{ticketDetails}}')" data-ticket-details="{{ticketDetails}}">Envia ticket a tu @email</button>
+                </div> --}}
+            </div>           
+        </div>        
+    </div>  
+    <a href="/products" class="backHome">Volver al Inicio</a> 
+</div>
+    
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/js/products.js"></script>

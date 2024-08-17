@@ -1,0 +1,14 @@
+{{>menuLoggedUser}}
+<div class="mainContainer">
+    <h1>Perfil del Usuario</h1>
+    <hr>
+
+    <h2>Datos del Perfil de: {{user.first_name}} {{user.last_name}}</h2>
+    <p><strong>Edad del Usuario:</strong> {{user.age}}</p>
+    <p><strong>E-mail registrado:</strong>{{user.email}}</p>
+    <p><strong>Rol del Usuario:</strong>{{user.rol}}</p>
+    <p><strong>Id# de tu Carrito:</strong>{{user.cart._id}}</p>
+    <br>
+    <a href="/carts/{{user.cart._id}}" class="userCarts" id="userCart" data-user-cid="{{user.cart._id}}">Ver tu Carrito</a>
+    <a href="/perfilUploads" class="userCarts" id="userDocuments">Cargar Archivos</a>
+</div>

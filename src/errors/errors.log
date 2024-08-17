@@ -1,0 +1,16 @@
+{
+  source: 'ReqMethod:POST, endpoint /',
+  userId: '6692ccc478731d4c349aee6f',
+  userEmail: 'premium5@test.com',
+  userAgent: 'PostmanRuntime/7.40.0',
+  name: 'Duplicate Code',
+  cause: 'Code 45835 is already registered and cannot be duplicated',
+  stack: 'Duplicate Code: Code 45835 is already registered and cannot be duplicated\n' +
+    '    at Function.createError (file:///D:/Coding/53140-backend/codigo/desafios/desafiosEntregables/d15_practicaIntegradora3/src/utils/CustomError.js:3:23)\n' +
+    '    at postProduct (file:///D:/Coding/53140-backend/codigo/desafios/desafiosEntregables/d15_practicaIntegradora3/src/controller/productsController.js:125:29)\n' +
+    '    at processTicksAndRejections (node:internal/process/task_queues:96:5)',
+  level: 'error',
+  message: 'Server Error 500',
+  timestamp: '2024-07-23T16:05:37.669Z',
+  label: 'Environment: prod'
+}

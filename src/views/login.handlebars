@@ -1,0 +1,28 @@
+{{>menu}}
+<div class="mainContainer">
+    <h1>Login</h1>
+    <hr>
+    <br>
+    <h2>Por Favor Ingresa los datos de tu cuenta:</h2>
+    <br>
+    <form action="/api/sessions/login" method="post">
+        <input type="email" name="email" placeholder="email">
+        <input type="password" name="password" placeholder="password">
+        <br>
+        <input type="submit" value="login">
+    </form>
+
+    <h3>Accede a través de tu cuenta de Github</h3>
+    <a href="/api/sessions/github" class="smallButton">Acceder con Github</a>
+
+    <h3>¿Aún no tienes una cuenta?</h3>
+    <a href="/registro" class="smallButton">Regístrate</a>
+    <br>
+    <br>
+
+    <h3>¿Olvidaste tu Contraseña?</h3>
+    <a href="/password" class="passwordButton">Reestablecer Password</a>
+    <br>  
+
+</div>
+

@@ -1,0 +1,29 @@
+{{>menu}}
+<div class="mainContainer">
+    <h1>Registro</h1>
+    <hr>
+    <br>
+    <h2>Por Favor Ingresa tus Datos:</h2>
+    <br>
+    <form action="/api/sessions/registro" method="post">
+        <input type="text" name="first_name" placeholder="Nombre">
+        <input type="text" name="last_name" placeholder="Apellido">
+        <input type="email" name="email" placeholder="email">
+        <input type="number" name="age" placeholder="tu edad. Ej: 40">
+        <input type="password" name="password" placeholder="password">
+        <br>
+        <input type="submit" value="registrarme" id="signup">
+    </form>
+
+    <h3>Regístrate vinculando tu cuenta de Github</h3>
+    <a href="/api/sessions/github" class="smallButton">Registrarme con Github</a>
+
+    <h3>¿Ya tienes una Cuenta?</h3>
+    <a href="/login" class="smallButton">Inicia Sesión</a>
+
+    <br><br>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/js/signup.js"></script>
+

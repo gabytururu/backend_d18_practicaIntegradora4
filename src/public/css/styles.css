@@ -1,0 +1,263 @@
+.mainContainer{    
+    background-color: white;
+    padding: 30px;
+    width: 80vw;
+    margin:auto;
+    margin-top:50px
+}
+
+.titles{
+    text-align: center;
+    margin-bottom: 10px;
+    padding:10px
+}
+
+h1{
+    font-size: 40px;
+    font-family: 'Verdana';
+}
+
+h2{
+    font-size: 20px;
+    font-family: 'Verdana';
+}
+
+.href{
+    background-color: #003366;
+    padding:20px;
+    text-decoration: none;
+    color: white;
+    font-family: 'Gill Sans', sans-serif;
+    border-radius: 8px;
+    font-size:18px
+}
+
+.href:hover{
+    color: #fff68f;
+    font-size:18.5px
+}
+
+.navButtons{
+    margin: 20px;
+    padding: 25px
+}
+
+.productsContainer{
+    border: solid 1px rgb(189, 189, 189);
+    background-color: #f5f5f5;
+    border-radius:8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding:20px
+}
+
+
+.navLink{
+    background-color:#fff9b5;
+    padding:4px;
+    border-radius:4px;
+    margin:15px;
+    color:black;
+    border: 1.5px solid gray 
+}
+.navLink:hover{
+    background-color:#fdf493;
+    color: black
+}
+
+.productsContainer h3{
+    margin:50px 0px 30px 0px;
+    color: #000080;
+    font-family: 'Gill Sans', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+}
+
+.productsList{
+    background-color: #3399ff;
+    /* background-color: #fafccb; */
+    display: flex; 
+    width: 70%;
+    padding: 30px;
+    border-radius: 5px;
+    flex-wrap: wrap ;
+    justify-content: space-around;
+}
+
+
+.productCard{
+    background-color: rgb(218, 238, 255);
+    padding:15px;
+    flex-basis: calc(40% - 15px);
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border-top:solid 5px #000080;
+    border-bottom:solid 5px #000080;
+    justify-content: center;
+}
+
+.resultsliContainer{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Gill Sans', sans-serif;
+}
+
+.buybuttonContainer{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    padding:10px
+}
+
+.checkDetails{
+    border-radius: 5px;
+    padding: 10px;
+}
+
+
+.buyButton{
+   border-radius: 5px;
+   padding: 10px;
+}
+
+.line{
+    height:1px;
+    width: 35%;
+    color:#000080;
+    border-style: dashed
+}
+
+ /* ------------ CHAT ------------ */
+.mensajesInput {
+    background-color:#000080;
+    border-radius:5px;
+    padding:10px;
+    display: flex;   
+    align-items: center;
+    height:5vh
+
+}
+.mensaje{
+    border: 1px solid #555;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: wheat;
+    /* margin-top: 5px; */
+    width: 100%;
+    height: 90%
+}
+
+.msjLabel{
+    color: white;
+    text-align: center;
+}
+
+.mensajesOutput {
+    background-color: #a4ccf3;
+    padding: 15px;
+    
+}
+
+.mensajes{
+    display:inline-block;
+    width: 100%;
+    height: 350px;
+    overflow-y: scroll;
+    box-shadow: 0px 0px 5px #333 inset;
+    padding: 5px;
+    background-color: rgb(147, 232, 235);
+}
+
+.mensajePush{
+    background-color: wheat;
+    padding: 5px;
+    border: 1px solid gray;
+    border-radius: 5px
+}
+
+.navContainer{
+    background-color:#fff9b5;
+    position: fixed;    
+    top: 0;             
+    width:100%;
+    display:flex;
+}
+
+.navbar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    list-style-type:none; 
+    width:80vw
+}
+.navbar li a{
+    text-decoration: none;
+    margin:20px;
+    font-size:20px;
+    font-weight: 600;
+}
+
+.smallButton{
+    text-decoration: none;
+    font-size: 17px;
+    text-transform: uppercase;
+    background-color: #000080;
+    color: white;
+    padding:10px;
+    border-radius: 5px;
+}
+
+.userCarts{
+    background-color: #000080;
+    padding: 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 17px;
+    color:white;
+    
+}
+
+.finalizePurchase{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 25px;
+}
+
+.finalizePurchaseBtn{
+    background-color: #000080;
+    padding: 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 17px;
+    color:white;
+}
+
+.backHome{
+    background-color: #000080;
+    margin-top:35px;
+    padding: 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 17px;
+    color:white;
+}
+
+.passwordButton{
+    background-color: #f3eb74;
+    margin-top:35px;
+    padding: 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 17px;
+    color:rgb(3, 3, 3);
+    font-weight:700;
+    cursor:pointer      
+}
+
+.passwordButton:hover{
+    background-color: #ffee07;
+}

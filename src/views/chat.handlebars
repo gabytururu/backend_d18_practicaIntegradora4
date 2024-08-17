@@ -1,0 +1,19 @@
+{{>menuLoggedUser}}
+<div class="mainContainer">
+    <div class="titles">
+        <h1>Chat de la Tienda</h1>
+    </div>
+    <div class="productsContainer">         
+    <div class="productsList">      
+        <div class="mensajesInput">
+            <label class="msjLabel" for="mensaje">Tu Mensaje:</label>
+            <input type="text" class="mensaje">
+        </div>
+        <div class="mensajesOutput">
+            <div class="mensajes"></div>
+        </div>
+    </div>    
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="socket.io/socket.io.js"></script>
+<script src="/js/chat.js"></script>

@@ -1,0 +1,28 @@
+{{>menuLoggedUser}}
+<div class="mainContainer">
+    <div class="titles">
+        <h1>Repositorio de Carritos</h1>
+    </div>
+    <div class="productsContainer">         
+        <h3>Carritos Existentes:</h3>
+        <div class="productsList">           
+            {{#each carts}}
+                    <div class="productCard">
+                        <div class="resultsliContainer">                       
+                                <h3>Carrito #{{_id}}</h3>
+                                <strong>Productos en el Carrito:</strong>                              
+                                    {{#each products}}
+                                        <p>{{pid.title}}</p>                        
+                                        <p><span><strong>price</strong> ${{pid.price}}<strong> Cantidad:</strong>{{this.qty}}</span></p>
+                                        <hr class="line">                               
+                                    {{/each}}
+                        </div>
+                        <div class="buybuttonContainer">
+                             <button class="checkDetails" onClick="checkCartDetails('{{_id}}')">Ver Detalles</button>
+                        </div>                        
+                    </div>
+                {{/each}}
+        </div>    
+    </div>
+</div>
+<script src="/js/carts.js"></script>

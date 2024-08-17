@@ -1,0 +1,62 @@
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Product Name
+        description:
+          type: string
+          description: Product description    
+        price:
+          type: number
+          description: Product full price
+        code: 
+          type: number
+          description: Unique number to identify product SKU, cannot be repeated accross products.
+        stock: 
+          type: number
+          description: Inventory units available for sale of this product
+        status: 
+          type: boolean
+          description: Default to true.
+        category: 
+          type: string
+          description: Category tag or department where this product belongs.
+        thumbnails: 
+          type: string
+          description: Image/Photo url of this product.
+        owner: 
+          type: string
+          description: Automatic reference assigned when a new product is posted. It establishes the user who created this product (either a premium user or an admin user).
+      example:      
+        _id: ObjectId("66a0002fadfa725c40ad84b1") | *asignada automáticamente por sistema
+        title: Nombre (title) del producto
+        description: Descripción detallada del producto
+        price: 50
+        code: 45844
+        stock: 100
+        status: true
+        owner: correodelusuario@test.com  | *asignada automáticamente por sistema
+        category: senderismo
+        thumbnails: https://picsum.photos/200
+        createdAt": 2024-07-23T19:10:39.493Z | *asignada automáticamente por sistema corresponde a la fecha y hora de creación del producto
+        updatedAt": 2024-07-23T19:10:39.493Z | *asignada automáticamente por sistema. Corresponde al a fecha y hora de última actualización del producto. 
+        __v: 0 | *asignada automáticamente por sistema, corresponde a la versión o número de ediciones del producto
+
+    Cart:
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              pid: 
+                $ref: '#/components/schemas/Product'
+                # type: string
+                # description: reference to the product Id populated
+              qty:
+                type: number
+                description: cantidad de unidades del producto

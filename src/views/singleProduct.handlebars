@@ -1,0 +1,39 @@
+{{#if userProfile.isPublic}}
+    {{>menu}}
+{{else}}
+    {{>menuLoggedUser}}
+{{/if}}
+   
+<div class="mainContainer">
+    <div class="titles">
+        <h1>Detalles del Producto</h1>
+         {{#if userProfile.isPublic}}
+            <h2>¡Hola Visitante!</h2>
+            <p>Requerda que debes registrate/loggearte para poder comprar</p>
+           {{/if}}
+    </div>
+</div>
+    <div class="productsContainer">
+        <div class="productsList">
+            <div class="productCard">
+                <div class="resultsliContainer single">
+                    <p><strong>{{matchingProduct.title}}:</strong> </p>
+                    <div><img src='{{matchingProduct.thumbnails}}'/></div>
+                    <p>{{matchingProduct.description}}</p>
+                    <p><strong>Categoria:</strong>{{matchingProduct.category}}</p>
+                    <p><strong>Code:</strong> {{matchingProduct.code}}</p>
+                    <p><strong>stock disponible:</strong>{{matchingProduct.stock}} piezas</p>
+                    <p><strong>Precio:</strong> ${{matchingProduct.price}}</p>
+                </div>
+                <div class="buybuttonContainer">
+                    {{#unless userProfile.isPublic}}
+                        <button class="buyButton" onClick="finalizePurchase('{{matchingProduct._id}}')" data-user-cid="{{userProfile.cart._id}}">comprar</button>    
+                    {{/unless}}    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/js/products.js"></script>

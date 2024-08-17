@@ -1,0 +1,178 @@
+paths:
+  /api/products:
+    get:
+      summary: Listado de todos los productos de la tienda.
+      tags:
+        - Products
+      description: Permite visualizar todos los productos disponibles de forma paginada. Está disponible para cualquier visitante del sitio (tanto usuarios como clientes o público no registrado)
+      responses:
+        '200':   
+          description: Los productos solicitados fueron obtenidos exitosamente. 
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#components/schemas/Product'   
+                  
+        '500':  
+          description: Error del servidor al ejecutar la petición.
+      parameters:
+        - in: query
+          name: pagina 
+          schema:
+            type: number
+          description: el número de paginación deseado (ej. pagina=3)
+        - in: query
+          name: limit 
+          schema:
+            type: number
+          description: el número máximo de items/productos del que se desea retornar (ej. limit=18)
+        - in: query
+          name: sort 
+          schema:
+            type: string
+          description: El orden en el que se desa ver los productos en función a su precio (ej. sort=DESC o sort=ASC)
+        - in: query
+          name: category 
+          schema:
+            type: string
+          description: Establece un filtro para ver únicamente los productos de la categoría indicada (ej. category=senderismo)
+        - in: query
+          name: stock 
+          schema:
+            type: string
+          description: Establece un filtro para ver únicamente los productos con disponibilidad de stock o inventario (ej. stock=disponible)           
+    post:
+      summary: Creación y almacenamiento de un nuevo producto en la base de datos.
+      tags:
+        - Products
+      description: Permite crear nuevos productos y almacenarlos en la base de datos. Sólo está disponible para usuarios premium y administradores.
+      requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  type: object
+                  $ref: '#/components/schemas/Product'
+                example:
+                  title: "Nombre de nuevo producto"
+                  description: "Descripción del producto"
+                  price: 100
+                  code: "codigo único (ej. 89654)"
+                  stock: 18 
+                  status: true
+                  category: "Categoría del producto (ej. senderismo, ciclismo, buceo, etc)"
+                  thumbnail: "https://example.com/product-image.jpg"
+      responses:
+        '201':
+          description: el Objeto del producto fue enviado exitosamente a la BD.
+          content:
+            application/json:
+              schema:   
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Argumentos inválidos o faltantes. El producto enviado contiene propiedades inválidas o faltantes.      
+        '401':
+          description: Error de autenticación. Debe existir un usuario loggeado para poder procesar esta petición   
+        '403':
+          description: Credenciales Inválidas. El usuario no cuenta con suficientes privilegios para esta petición. 
+        '500':  
+          description: Error del servidor al ejecutar la petición.
+  /api/products/{pid}:
+    get:
+      summary: Obtención de 1 producto con todas sus propiedades detalladas. 
+      tags:
+        - Products
+      description: Permite visualizar 1 producto con todas sus propiedades desglosadas. El producto es el correspondiente al id# del parámetro proporcionado "pid". Está disponible para cualquier visitante del sitio (tanto usuarios como clientes o público no registrado)
+      operationId: getProductById
+      parameters:
+        - name: pid
+          in: path
+          description: Product Id#
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: El producto seleccionado fue obtenido exitosamente de la BD.
+          content:
+            application/json:
+              schema:       
+                $ref: '#components/schemas/Product'  
+        '400': 
+          description: El formato del id de producto (pid) proporcionado no es correcto
+        '404':
+          description: El producto seleccionado no fue encontrado en la base de datos 
+        '500':
+          description: Error del servidor al ejecutar la petición.
+    put:
+      summary: Modificación de 1 producto a partir del envío de las propiedades a modificar
+      tags:
+        - Products
+      description: Permite modificar las propiedades de 1 producto (el indicado a través del path param) apartir del envío de las nuevas propiedades a través del body de la petición.Las propiedades modificables son title, description, stock, precio, code, category y thumbnails. Se sugiere no modificar el resto de las propiedades. Es posible enviar desde una hasta todas las propiedades modificables a la vez. Está disponible únicamente para administradores y usuarios premium que sean dueños del producto en cuestión     
+      requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                title: "Nombre Modificado del producto"
+                stock: 38
+      operationId: updateProduct
+      parameters:
+        - name: pid
+          in: path
+          description: Product Id#
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: El producto seleccionado fue modificado exitosamente en la BD.
+          content:
+            application/json:
+              schema:       
+                $ref: '#components/schemas/Product'  
+        '400': 
+          description: El formato del id de producto (pid) proporcionado no es correcto
+        '401': 
+          description: Es necesario autenticar(login) para obtener la respuesta solicitada. 
+        '403': 
+          description: El cliente no posee los permisos necesarios para realizar esta operación.
+        '404':
+          description: El producto seleccionado no fue encontrado en la base de datos 
+        '500':
+          description: Error del servidor al ejecutar la petición.
+    delete:
+      summary: Eliminación de 1 producto de la base de datos. 
+      tags:
+        - Products
+      description: Permite eliminar 1 producto con todas sus propiedades de la base de datos. El producto es el correspondiente al id# del parámetro proporcionado "pid". Está disponible únicamente para administradores y usuarios premium que son "propietarios" del producto a ser borrado
+      operationId: deleteProduct
+      parameters:
+        - name: pid
+          in: path
+          description: Product Id#
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: El producto seleccionado fue borrado exitosamente de la BD.
+          content:
+            application/json:
+              schema:       
+                $ref: '#components/schemas/Product'  
+        '400': 
+          description: El formato del id de producto (pid) proporcionado no es correcto
+        '401': 
+          description: Es necesario autenticar(login) para intentar la acción solicitada. 
+        '403': 
+          description: El cliente no posee los permisos necesarios para realizar esta operación.
+        '404':
+          description: El producto seleccionado no fue encontrado en la base de datos 
+        '500':
+          description: Error del servidor al ejecutar la petición.
+
