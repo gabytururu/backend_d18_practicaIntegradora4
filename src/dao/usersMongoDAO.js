@@ -17,6 +17,7 @@ export class UsersMongoDAO{
         return newUserCreated.toJSON()
     }  
 
+    //new conditional added - (hasownprop reference) - testing pending on the other conditionals to verify none of them broke
     async push(uid,itemToUpdate){
         console.log("Este es el item to update-->", itemToUpdate)
         let query;

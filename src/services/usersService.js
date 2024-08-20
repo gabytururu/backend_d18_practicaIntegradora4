@@ -42,10 +42,14 @@ class UsersService{
 
     udpateUserLastConnection=async(uid, lastConnection)=>{
         return await this.dao.update(uid,lastConnection)
-    }
+    }  
 
     addDocumentToUser=async(uid,document)=>{
         return await this.dao.push(uid,document)
+    }
+
+    changeUserDocStatus=async(uid,status)=>{
+        return await this.dao.update(uid,status)
     }
 }
 

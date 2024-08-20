@@ -1,5 +1,6 @@
 import { Router } from 'express';
-//import { usersController } from '../controller/usersController.js';
+import fs from "fs";
+import path from "path";
 import {customAuth} from '../middleware/auth.js'
 import { config } from '../config/config.js';
 import { upload, cleanPath } from '../utils.js';
@@ -36,18 +37,64 @@ router.get('/:uid', customAuth(["admin"]), async(req,res)=>{
     }  
 })
 
-router.post('/:uid/documents',upload.single("upload"),async(req,res)=>{
+router.post('/:uid/documents',upload.single("upload"),async(req,res)=>{ 
     res.setHeader('Content-type', 'application/json');
-    const {uid} = req.params
-    const {name, ...rest}=req.body
-    console.log('el req.file de ENDPOINT',req.file)
-    console.log('el name desde ENDPOINT',name)
-    console.log('el REST desde ENDPOINT',rest)
-    //const document={name, reference:cleanPath(req.file.path)}
+        const {uid} = req.params
+        const {name}= req.body
+        const file = req.file
+
+        if(!file){
+            return res.status(400).json({
+                error:`Error 400 Missing documents:no file received`,
+                message: `No file was received`
+            })
+        }
+
+        if(!name){
+            return res.status(400).json({
+                error:`Error 400 Missing data`,
+                message: `Uploaded file received lacks mandatory data: no name`
+            })
+        }        
+
+    try {       
+
+        let folder ='';
+        switch(name){
+            case "profilePic":
+                folder="./src/public/uploads/profile";
+                break;
+            case "identificacion":
+            case "compDomicilio":
+            case "edoCuenta":
+                folder="./src/public/uploads/documents";
+                break;
+            case "producto":
+                folder="./src/public/uploads/products"
+                break;
+            default:
+                folder="./src/public/uploads/others"
+                break;
+        }
+
+        const tempPath=file.path
+        const finalPath=path.join(folder,file.filename)
+        let document={
+            name, 
+            reference:cleanPath(finalPath)
+        }
     
-    try {
-       // let updatedUserDocuments= await usersService.addDocumentToUser(uid,document)       
-        return res.status(200).json({payload:'updatedUserDocuments'})
+        await fs.promises.rename(tempPath,finalPath)       
+        const updatedUserDocuments= await usersService.addDocumentToUser(uid,document)  
+        let docStatusArray =[]
+        updatedUserDocuments.documents.forEach(doc=>{
+            docStatusArray.push(doc.document.name)
+        })
+        if(["identificacion", "edoCuenta", "compDomicilio"].every(doc=>docStatusArray.includes(doc))){
+            await usersService.changeUserDocStatus({_id:uid},{docStatus:"complete"})
+        } 
+        const updatedDocsUser=await usersService.getUserById({_id:uid})
+        return res.status(200).json({payload:updatedDocsUser})  
     } catch (error) {
         return res.status(500).json({
             error:`Error 500 Server failed unexpectedly, please try again later`,
@@ -63,14 +110,20 @@ router.put('/premium/:uid', customAuth(["admin"]), async(req,res)=>{
     try{
         const user= await usersService.getUserById({_id:uid})
         if(user.rol==='user'){
-            user.rol = 'premium'
+            if(user.docStatus !== "complete"){
+               return res.status(400).json({
+                error:`Error 400: missing information, petition cannot be complted`,
+                message: `User with id#${uid} has submitted all required documentation to be a premium user`
+               })
+            }
+            user.rol = 'premium'    
         }else if(user.rol === 'premium'){
             user.rol = 'user'       
         }
 
-        const updateRolUser= await usersService.changeUserRol({_id:uid},{rol:user.rol})
+        const updatedRolUser= await usersService.changeUserRol({_id:uid},{rol:user.rol})
         res.setHeader('Content-type', 'application/json');
-        return res.status(200).json({payload:updateRolUser})
+        return res.status(200).json({payload:updatedRolUser})
     }catch{      
         return res.status(500).json({
             error:`Error 500 Server failed unexpectedly, please try again later`,

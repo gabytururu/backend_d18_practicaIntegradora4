@@ -36,7 +36,6 @@ export const initPassport=()=>{
                     }
 
                     if(!age){  
-                        console.log('falta edad')
                         appLogger.info('REGISTRO FAILED: Failed to complete signup due to missing age.Please make sure all mandatory fields(*)are completed to proceed with signup') 
                         return done(null,false, {message: `Signup failed: Must complete all signup required data to access`})
                     }
@@ -62,7 +61,6 @@ export const initPassport=()=>{
                     return done(null, newUser)
 
                 } catch (error) {
-                    console.log('el error aca en el passport_',error)
                     req.logger.error('Server Error Caught at REGISTRO strategy',new reqLoggerDTO(req,error)) 
                     return done(error) 
                 }
@@ -110,8 +108,7 @@ export const initPassport=()=>{
                             appLogger.info('The password provided does not match our records. Please verify and try again.')
                             return done(null,false, {message: `Login failed - invalid password please verify and try again`})
                     }  
-                    userIsValid.last_connection = new Date()
-                    console.log('USER IS VALID EN LOGIN--->',userIsValid)       
+                    userIsValid.last_connection = new Date()    
                     return done(null,userIsValid)
                 } catch (error) {
                     appLogger.error('Server Error Caught at LOGIN strategy',new appLoggerDTO(error)) 
@@ -132,7 +129,6 @@ export const initPassport=()=>{
             },
             async(accessToken,refreshToken,profile,done)=>{
                 try {
-                    console.log("el profile desde github AUTH", profile)
                     const email=profile._json.email?profile._json.email:'N/A - Github connection'
                     const first_name= profile._json.name?profile._json.name:profile.username
                     const last_name= profile._json.name?profile._json.name:profile.username
@@ -149,7 +145,6 @@ export const initPassport=()=>{
                             profile
                         })        
                     }
-                    console.log("github AUTH user from psasportConfig hacia router-->", authenticatedUser)
                     return done(null,authenticatedUser)
                 } catch (error) {
                     return done(error)

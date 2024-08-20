@@ -131,36 +131,12 @@ const options = {
  
 const storage=multer.diskStorage({
     destination: function(req,file,cb){
-        console.log('el file a como viene en multer', file)
-        let folder ='';
-        console.log('la req.body.name desde MULTER',req.body.name)
-       
-        
-        switch(file.fieldname){
-            case "profilePic":
-                folder="./src/public/uploads/profile";
-                break;
-            case "identificacion":
-            case "compDomicilio":
-            case "edoCuenta":
-                folder="./src/public/uploads/documents";
-                break;
-            case "products":
-                folder="./src/public/uploads/products"
-                break;
-            default:
-                folder="./src/public/uploads/others"
-                break;
-        }
-       
-       // cb(null,"./src/uploads") // cambiar a path absoluto
-        cb(null,folder) // cambiar a path absoluto
+        cb(null,"./src/public/uploads/temp") // cambiar a path absoluto
     },
     filename:function(req,file,cb){
         cb(null,file.originalname)
     }
 })
-
 export const upload=multer({storage:storage})
 
 export const cleanPath=(path)=>{

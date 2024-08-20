@@ -20,6 +20,10 @@ const usersSchema = new mongoose.Schema(
             type:String,
             default:"user"
         },
+        docStatus:{
+            type:String,
+            default:"pending"
+        },
         tickets: {
             type:[
                 {

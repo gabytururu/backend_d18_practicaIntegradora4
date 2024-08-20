@@ -7,43 +7,18 @@
                       <p>{{user._id}}</p>
     <form action="/api/users/{{user._id}}/documents" method="POST" enctype="multipart/form-data">
         <div>
-            <p>Imágenes de tu Perfil</p>
-            <input type="file" name="upload" />
-            {{!-- <input type="text" name="profilePic" placeholder="profilePic"> --}}
+            <input type="file" name="upload">
             <select name="name">
                 <option value="profilePic" selected>Foto de Perfil</option>
                 <option value="identificacion">Identificacion</option>
                 <option value="compDomicilio">Comprobante de Domicilio</option>
                 <option value="edoCuenta">Estado de Cuenta</option>
+                <option value="producto">Foto de un producto tuyo</option>
             </select>
+            <br>
                 
         </div>   
         <br>
         <input type="submit" value="Grabar">
     </form>
-
-    {{!-- <form action="/api/{{user._id}}/documentos" method="post" enctype="multipart/form-data">
-     <div>
-        <div>
-        <p>Documentos Personales</p>
-            <input type="file" name="Identificacion" />
-            <input type="text" name="identificacion" placeholder="Identificacion"><br>
-            <input type="file" name="domicilio" />
-            <input type="text" name="domicilio" placeholder="domicilio"><br>
-            <input type="file" name="statusCuenta" />
-            <input type="text" name="statusCuenta" placeholder="statusCuenta">
-        </div> 
-        <div>          
-        <p>Imágenes de Tus productos</p>
-            <input type="file" name="producto" />
-            <input type="text" name="producto" placeholder="producto">
-        </div>   
-     </div>
-      <br>
-        <input type="submit" value="Grabar">
-    </form>
-      --}}
-
-  
-   
 </div>

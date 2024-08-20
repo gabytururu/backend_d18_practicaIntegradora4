@@ -12,7 +12,6 @@ import bcrypt from 'bcrypt';
 
 
 //let usersManager = new UsersManager()
-
 export const router=Router();
 
 router.post('/registro',passportCallError("registro"),async(req,res)=>{
@@ -47,7 +46,7 @@ router.post('/login',passportCallError("login"),async(req,res)=>{
     delete authenticatedUser.password
     req.session.user = authenticatedUser    
     
-    //**bug - pending to fic: headers on testing are different than on direct client DOM a/o POSTMAN**
+    //**bug - pending to fix: headers on testing are different than on direct client DOM a/o POSTMAN**
         const acceptHeader = req.headers['accept']
         if(acceptHeader?.includes('text/html')){
             return res.status(301).redirect('/products')
@@ -58,11 +57,13 @@ router.post('/login',passportCallError("login"),async(req,res)=>{
         status: 'success',
         message: 'User login was completed successfully',
         payload: {
+            id:authenticatedUser._id,
             nombre: authenticatedUser.first_name,
             apellido: authenticatedUser.last_name,
             edad: authenticatedUser.age,
             email: authenticatedUser.email,
             rol:authenticatedUser.rol,
+            docStatus:authenticatedUser.docStatus,
             carrito:authenticatedUser.cart,
             last_connection: authenticatedUser.last_connection
         }
@@ -91,7 +92,6 @@ router.get('/current', customAuth(["user","premium", "admin"]), async(req,res)=>
         }    
     })
 })
-
 
 router.get('/logout', customAuth(["user","admin","premium"]),async(req,res)=>{
     req.session.destroy(error=>{
